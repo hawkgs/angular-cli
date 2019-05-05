@@ -72,7 +72,7 @@ export function isWorkspaceProject(project: any): project is WorkspaceProject {
   return !!(project && (project as WorkspaceProject).projectType);
 }
 
-export function isProjectUsingIvy(host: Tree, project: WorkspaceProject) {
+export function isProjectUsingIvy(host: Tree, project: WorkspaceProject): boolean {
   const projectRoot = getProjectRoot(project);
   const config = getProjectConfig(host, projectRoot + 'tsconfig.app.json');
 
@@ -82,7 +82,7 @@ export function isProjectUsingIvy(host: Tree, project: WorkspaceProject) {
     const mainConfig = getProjectConfig(host, `${project.root}/tsconfig.json`);
     const { angularCompilerOptions } = mainConfig;
 
-    return angularCompilerOptions && angularCompilerOptions.enableIvy;
+    return !!(angularCompilerOptions && angularCompilerOptions.enableIvy);
   }
 
   return ivyEnabled;

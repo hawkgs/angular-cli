@@ -159,7 +159,7 @@ export default function (options: ModuleOptions): Rule {
       routingModulePath = getRoutingModulePath(host, options);
     }
 
-    const project = getProject(host, options.project);
+    const project = getProject(host, options.project as string);
     const templateSource = apply(url('./files'), [
       options.routing || isLazyLoadedModuleGen && !!routingModulePath
         ? noop()
