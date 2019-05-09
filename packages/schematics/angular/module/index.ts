@@ -41,7 +41,7 @@ function addDeclarationToNgModule(options: ModuleOptions): Rule {
     if (text === null) {
       throw new SchematicsException(`File ${modulePath} does not exist.`);
     }
-    const sourceText = text.toString('utf-8');
+    const sourceText = text.toString();
     const source = ts.createSourceFile(modulePath, sourceText, ts.ScriptTarget.Latest, true);
 
     const importModulePath = normalize(
@@ -92,7 +92,7 @@ function addRouteDeclarationToNgModule(
       throw new Error(`Couldn't find the module nor its routing module.`);
     }
 
-    const sourceText = text.toString('utf-8');
+    const sourceText = text.toString();
     const addDeclaration = addRouteDeclarationToModule(
       ts.createSourceFile(path, sourceText, ts.ScriptTarget.Latest, true),
       path,
