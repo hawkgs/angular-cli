@@ -26,9 +26,7 @@ import { InsertChange } from '../utility/change';
 import { buildRelativePath, findModuleFromOptions } from '../utility/find-module';
 import { applyLintFix } from '../utility/lint-fix';
 import { parseName } from '../utility/parse-name';
-import { getProject, isProjectUsingIvy } from '../utility/project';
 import { createDefaultPath } from '../utility/workspace';
-import { WorkspaceProject } from '../utility/workspace-models';
 import { RoutingScope, Schema as ModuleOptions } from './schema';
 
 function addDeclarationToNgModule(options: ModuleOptions): Rule {
@@ -72,22 +70,21 @@ function addDeclarationToNgModule(options: ModuleOptions): Rule {
 
 function addRouteDeclarationToNgModule(
   options: ModuleOptions,
-  project: WorkspaceProject,
   routingModulePath: Path | undefined,
 ): Rule {
   return (host: Tree) => {
     if (!options.route) {
       return host;
     }
-    if (options.route && !options.module) {
+    if (!options.module) {
       throw new Error('Module option required when creating a lazy loaded routing module.');
     }
 
     let path: string;
     if (routingModulePath) {
-      path = routingModulePath as string;
+      path = routingModulePath;
     } else {
-      path = options.module as string;
+      path = options.module;
     }
 
     const text = host.read(path);
@@ -95,12 +92,11 @@ function addRouteDeclarationToNgModule(
       throw new Error(`Couldn't find the module nor its routing module.`);
     }
 
-    const ivyEnabled = isProjectUsingIvy(host, project);
     const sourceText = text.toString('utf-8');
     const addDeclaration = addRouteDeclarationToModule(
       ts.createSourceFile(path, sourceText, ts.ScriptTarget.Latest, true),
       path,
-      buildRoute(options, ivyEnabled),
+      buildRoute(options),
     ) as InsertChange;
 
     const recorder = host.beginUpdate(path);
@@ -124,16 +120,10 @@ function getRoutingModulePath(host: Tree, options: ModuleOptions): Path | undefi
   return path;
 }
 
-function buildRoute(options: ModuleOptions, ivyEnabled: boolean) {
-  let loadChildren: string;
+function buildRoute(options: ModuleOptions) {
   const modulePath = `./${options.name}/${options.name}.module`;
   const moduleName = `${strings.classify(options.name)}Module`;
-
-  if (ivyEnabled) {
-    loadChildren = `() => import('${modulePath}').then(m => m.${moduleName})`;
-  } else {
-    loadChildren = `'${modulePath}#${moduleName}'`;
-  }
+  const loadChildren = `() => import('${modulePath}').then(m => m.${moduleName})`;
 
   return `{ path: '${options.route}', loadChildren: ${loadChildren} }`;
 }
@@ -159,7 +149,6 @@ export default function (options: ModuleOptions): Rule {
       routingModulePath = getRoutingModulePath(host, options);
     }
 
-    const project = getProject(host, options.project as string);
     const templateSource = apply(url('./files'), [
       options.routing || isLazyLoadedModuleGen && !!routingModulePath
         ? noop()
@@ -176,7 +165,7 @@ export default function (options: ModuleOptions): Rule {
 
     return chain([
       !isLazyLoadedModuleGen ? addDeclarationToNgModule(options) : noop(),
-      addRouteDeclarationToNgModule(options, project, routingModulePath),
+      addRouteDeclarationToNgModule(options, routingModulePath),
       isLazyLoadedModuleGen
         ? schematic('component', {
             ...options,

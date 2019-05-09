@@ -126,14 +126,6 @@ describe('Module Schematic', () => {
       module: 'app',
     };
 
-    beforeEach(() => {
-      appTree.create(
-        '/projects/bar/src/tsconfig.app.json',
-        '{ "angularCompilerOptions": { "enableIvy": false } }',
-      );
-      appTree.create('/projects/bar/tsconfig.json', '{}');
-    });
-
     it('should generate a lazy loaded module with a routing module', async () => {
       const tree = await schematicRunner.runSchematicAsync('module', options, appTree).toPromise();
       const files = tree.files;
@@ -145,7 +137,9 @@ describe('Module Schematic', () => {
       expect(files).toContain('/projects/bar/src/app/foo/foo.component.css');
 
       const appRoutingModuleContent = tree.readContent('/projects/bar/src/app/app-routing.module.ts');
-      expect(appRoutingModuleContent).toMatch(/ path: '\/new-route', loadChildren: '.\/foo\/foo.module#FooModule' /);
+      expect(appRoutingModuleContent).toMatch(
+        /path: '\/new-route', loadChildren: \(\) => import\('.\/foo\/foo.module'\).then\(m => m.FooModule\)/,
+      );
 
       const fooRoutingModuleContent = tree.readContent('/projects/bar/src/app/foo/foo-routing.module.ts');
       expect(fooRoutingModuleContent).toMatch(/RouterModule.forChild\(routes\)/);
@@ -185,25 +179,14 @@ describe('Module Schematic', () => {
       expect(files).toContain('/projects/bar/src/app/foo/foo.component.css');
 
       const appModuleContent = tree.readContent('/projects/bar/src/app/app.module.ts');
-      expect(appModuleContent).toMatch(/ path: '\/new-route', loadChildren: '.\/foo\/foo.module#FooModule' /);
+      expect(appModuleContent).toMatch(
+        /path: '\/new-route', loadChildren: \(\) => import\('.\/foo\/foo.module'\).then\(m => m.FooModule\)/,
+      );
 
       const fooModuleContent = tree.readContent('/projects/bar/src/app/foo/foo.module.ts');
       expect(fooModuleContent).toMatch(/RouterModule.forChild\(routes\)/);
       expect(fooModuleContent)
         .toMatch(/const routes: Routes = \[\r?\n?\s*{ path: '', component: FooComponent }\r?\n?\s*\];/);
-    });
-
-    it('should support Ivy module imports', async () => {
-      appTree.overwrite(
-        '/projects/bar/src/tsconfig.app.json',
-        '{ "angularCompilerOptions": { "enableIvy": true } }',
-      );
-      const tree = await schematicRunner.runSchematicAsync('module', options, appTree).toPromise();
-
-      const appRoutingModuleContent = tree.readContent('/projects/bar/src/app/app-routing.module.ts');
-      expect(appRoutingModuleContent).toMatch(
-        /loadChildren: \(\) => import\('.\/foo\/foo.module'\).then\(m => m.FooModule\)/,
-      );
     });
   });
 });
