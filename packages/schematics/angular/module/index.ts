@@ -121,7 +121,8 @@ function getRoutingModulePath(host: Tree, options: ModuleOptions): Path | undefi
 }
 
 function buildRoute(options: ModuleOptions) {
-  const modulePath = `./${options.name}/${options.name}.module`;
+  const dasherizedName = strings.dasherize(options.name);
+  const modulePath = `./${dasherizedName}/${dasherizedName}.module`;
   const moduleName = `${strings.classify(options.name)}Module`;
   const loadChildren = `() => import('${modulePath}').then(m => m.${moduleName})`;
 
