@@ -2,15 +2,14 @@ import { NgModule } from '@angular/core';<% if (commonModule) { %>
 import { CommonModule } from '@angular/common';<% } %><% if (lazyRoute && routeDeclarationInlined) { %>
 import { Routes, RouterModule } from '@angular/router';<% } %>
 <% if (routing || lazyRoute && !routeDeclarationInlined) { %>
-import { <%= classify(name) %>RoutingModule } from './<%= dasherize(name) %>-routing.module';<% } %><% if (lazyRoute) { %>
-import { <%= classify(name) %>Component } from './<%= dasherize(name) %>.component';<% } %>
+import { <%= classify(name) %>RoutingModule } from './<%= dasherize(name) %>-routing.module';<% } %>
 <% if (lazyRoute && routeDeclarationInlined) { %>
 const routes: Routes = [
   { path: '', component: <%= classify(name) %>Component }
 ];<% } %>
 
 @NgModule({
-  declarations: [<% if (lazyRoute) { %><%= classify(name) %>Component<% } %>],
+  declarations: [],
   imports: [<% if (commonModule) { %>
     CommonModule<%= routing || lazyRoute && !routeDeclarationInlined ? ',' : '' %><% } %><% if (routing || lazyRoute && !routeDeclarationInlined) { %>
     <%= classify(name) %>RoutingModule<% } %><%= lazyRoute && routeDeclarationInlined ? ',' : '' %><% if (lazyRoute && routeDeclarationInlined) { %>

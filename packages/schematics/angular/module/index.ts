@@ -163,17 +163,20 @@ export default function (options: ModuleOptions): Rule {
       }),
       move(parsedPath.path),
     ]);
+    const { module, ...modulelessOptions } = options;
+    const moduleDasherized = strings.dasherize(options.name);
+    const modulePath = `${moduleDasherized}/${moduleDasherized}.module.ts`;
 
     return chain([
       !isLazyLoadedModuleGen ? addDeclarationToNgModule(options) : noop(),
       addRouteDeclarationToNgModule(options, routingModulePath),
+      mergeWith(templateSource),
       isLazyLoadedModuleGen
         ? schematic('component', {
-            ...options,
-            skipImport: true,
+            ...modulelessOptions,
+            module: modulePath,
           })
         : noop(),
-      mergeWith(templateSource),
       options.lintFix ? applyLintFix(options.path) : noop(),
     ]);
   };
