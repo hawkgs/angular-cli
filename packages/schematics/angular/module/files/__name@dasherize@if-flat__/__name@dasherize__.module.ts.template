@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';<% if (commonModule) { %>
-import { CommonModule } from '@angular/common';<% } %><% if (lazyRoute && routeDeclarationInlined) { %>
+import { CommonModule } from '@angular/common';<% } %><% if (lazyRouteWithoutRouteModule) { %>
 import { Routes, RouterModule } from '@angular/router';<% } %>
-<% if (routing || lazyRoute && !routeDeclarationInlined) { %>
+<% if (routing || lazyRouteWithRouteModule) { %>
 import { <%= classify(name) %>RoutingModule } from './<%= dasherize(name) %>-routing.module';<% } %>
-<% if (lazyRoute && routeDeclarationInlined) { %>
+<% if (lazyRouteWithoutRouteModule) { %>
 const routes: Routes = [
   { path: '', component: <%= classify(name) %>Component }
 ];<% } %>
@@ -11,8 +11,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [],
   imports: [<% if (commonModule) { %>
-    CommonModule<%= routing || lazyRoute && !routeDeclarationInlined ? ',' : '' %><% } %><% if (routing || lazyRoute && !routeDeclarationInlined) { %>
-    <%= classify(name) %>RoutingModule<% } %><%= lazyRoute && routeDeclarationInlined ? ',' : '' %><% if (lazyRoute && routeDeclarationInlined) { %>
+    CommonModule<%= routing || lazyRouteWithRouteModule ? ',' : '' %><% } %><% if (routing || lazyRouteWithRouteModule) { %>
+    <%= classify(name) %>RoutingModule<% } %><%= lazyRouteWithoutRouteModule ? ',' : '' %><% if (lazyRouteWithoutRouteModule) { %>
     RouterModule.forChild(routes)<% } %>
   ]
 })
