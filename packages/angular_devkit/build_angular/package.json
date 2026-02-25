@@ -71,8 +71,8 @@
     "undici": "7.22.0"
   },
   "peerDependencies": {
-    "@angular/core": "0.0.0-ANGULAR-FW-PEER-DEP",
     "@angular/compiler-cli": "0.0.0-ANGULAR-FW-PEER-DEP",
+    "@angular/core": "0.0.0-ANGULAR-FW-PEER-DEP",
     "@angular/localize": "0.0.0-ANGULAR-FW-PEER-DEP",
     "@angular/platform-browser": "0.0.0-ANGULAR-FW-PEER-DEP",
     "@angular/platform-server": "0.0.0-ANGULAR-FW-PEER-DEP",
@@ -81,7 +81,6 @@
     "browser-sync": "^3.0.2",
     "karma": "^6.3.0",
     "ng-packagr": "0.0.0-NG-PACKAGR-PEER-DEP",
-    "protractor": "^7.0.0",
     "tailwindcss": "^2.0.0 || ^3.0.0 || ^4.0.0",
     "typescript": ">=5.9 <6.0"
   },
@@ -111,9 +110,6 @@
       "optional": true
     },
     "ng-packagr": {
-      "optional": true
-    },
-    "protractor": {
       "optional": true
     },
     "tailwindcss": {

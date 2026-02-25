@@ -66,11 +66,6 @@ export function executeKarmaBuilder(
 export { type KarmaBuilderOptions, type KarmaConfigOptions };
 
 export {
-  execute as executeProtractorBuilder,
-  type ProtractorBuilderOptions,
-} from './builders/protractor';
-
-export {
   execute as executeServerBuilder,
   type ServerBuilderOptions,
   type ServerBuilderOutput,

@@ -36,7 +36,6 @@ export const devServerTargetSpec = { project: 'app', target: 'serve' };
 export const extractI18nTargetSpec = { project: 'app', target: 'extract-i18n' };
 export const karmaTargetSpec = { project: 'app', target: 'test' };
 export const tslintTargetSpec = { project: 'app', target: 'lint' };
-export const protractorTargetSpec = { project: 'app-e2e', target: 'e2e' };
 
 export async function createArchitect(workspaceRoot: Path) {
   const registry = new schema.CoreSchemaRegistry();

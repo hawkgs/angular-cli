@@ -174,9 +174,6 @@ export function executeKarmaBuilder(options: KarmaBuilderOptions, context: Build
 export function executeNgPackagrBuilder(options: NgPackagrBuilderOptions, context: BuilderContext): Observable<BuilderOutput>;
 
 // @public
-export function executeProtractorBuilder(options: ProtractorBuilderOptions, context: BuilderContext): Promise<BuilderOutput>;
-
-// @public
 export function executeServerBuilder(options: ServerBuilderOptions, context: BuilderContext, transforms?: {
     webpackConfiguration?: ExecutionTransformer<webpack.Configuration>;
 }): Observable<ServerBuilderOutput>;
@@ -268,20 +265,6 @@ export enum OutputHashing {
     // (undocumented)
     None = "none"
 }
-
-// @public
-export type ProtractorBuilderOptions = {
-    baseUrl?: string;
-    devServerTarget?: string;
-    grep?: string;
-    host?: string;
-    invertGrep?: boolean;
-    port?: number;
-    protractorConfig: string;
-    specs?: string[];
-    suite?: string;
-    webdriverUpdate?: boolean;
-};
 
 // @public (undocumented)
 export type ServerBuilderOptions = {

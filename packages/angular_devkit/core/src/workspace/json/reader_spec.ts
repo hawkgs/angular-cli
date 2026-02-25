@@ -75,7 +75,7 @@ describe('readJsonWorkpace Parsing', () => {
 
     const workspace = await readJsonWorkspace('', host);
 
-    expect(Array.from(workspace.projects.keys())).toEqual(['my-app', 'my-app-e2e']);
+    expect(Array.from(workspace.projects.keys())).toEqual(['my-app']);
     expect(workspace.extensions['newProjectRoot']).toBe('projects');
     expect(workspace.projects.get('my-app')!.extensions['schematics']).toEqual({
       '@schematics/angular:component': { styleext: 'scss' },
